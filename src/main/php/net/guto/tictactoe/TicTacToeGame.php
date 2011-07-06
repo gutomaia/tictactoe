@@ -4,7 +4,6 @@ class net_guto_tictactoe_TicTacToeGame {
 
 	private $player1Moves = 0;
 	private $player2Moves = 0;
-	private $playerTurn;
 
 	public function start($moves = null){
 		if ($moves == null)
@@ -19,7 +18,18 @@ class net_guto_tictactoe_TicTacToeGame {
 	}
 
 	public function move($move){
-		$boardMoves = $this->player1Moves || $this->player2Moves;
+		if ($this->hasAWinner()){
+			//throw new net_guto_tictactoe_MoveException();
+		}
+		$boardMoves = $this->player1Moves | $this->player2Moves;
+		$turn = 1;
+		for ($i = 0; $i < 9; $i++)
+			if (($boardMoves & pow(2,$i)) == pow(2,$i))
+				$turn++;
+		if (($turn % 2) != 0)
+			$this->player1Moves = $this->player1Moves | pow(2, $move-1);
+		else 
+			$this->player2Moves = $this->player2Moves | pow(2, $move-1);
 	}
 
 	public function playerOneWins(){
@@ -45,38 +55,16 @@ class net_guto_tictactoe_TicTacToeGame {
 		return $this->playerOneWins() || $this->playerTwoWins();
 	}
 
-	public function checkWinner($player1Moves, $player2Moves){
-		
-	}
-
 	public function fillBoard(&$board, $value, $moves){
-		if (($moves & 1) == 1){
-			$board[0][0] = $value;
-		}
-		if (($moves & 2 ) == 2){
-			$board[0][1] = $value;
-		}
-		if (($moves & 4 ) == 4){
-			$board[0][2] = $value;
-		}
-		if (($moves & 8 ) == 8){
-			$board[1][0] = $value;
-		}
-		if (($moves & 16 ) == 16){
-			$board[1][1] = $value;
-		}
-		if (($moves & 32 ) == 32){
-			$board[1][2] = $value;
-		}
-		if (($moves & 64 ) == 64){
-			$board[2][0] = $value;
-		}
-		if (($moves & 128 ) == 128){
-			$board[2][1] = $value;
-		}
-		if (($moves & 256 ) == 256){
-			$board[2][2] = $value;
-		}
+		if (($moves & 1) == 1) $board[0][0] = $value;
+		if (($moves & 2 ) == 2) $board[0][1] = $value;
+		if (($moves & 4 ) == 4) $board[0][2] = $value;
+		if (($moves & 8 ) == 8) $board[1][0] = $value;
+		if (($moves & 16 ) == 16) $board[1][1] = $value;
+		if (($moves & 32 ) == 32) $board[1][2] = $value;
+		if (($moves & 64 ) == 64) $board[2][0] = $value;
+		if (($moves & 128 ) == 128) $board[2][1] = $value;
+		if (($moves & 256 ) == 256) $board[2][2] = $value;
 		return $board;
 	}
 
@@ -88,7 +76,6 @@ class net_guto_tictactoe_TicTacToeGame {
 		);
 		$board = $this->fillBoard($board, 'O', $this->player1Moves);
 		$board = $this->fillBoard($board, 'X', $this->player2Moves);
-
 		return $board;
 	}
 }
