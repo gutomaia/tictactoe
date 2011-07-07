@@ -104,6 +104,7 @@
 			<groupId>org.phpunit</groupId>
 			<artifactId>phpunit5</artifactId>
 			<version>3.3.9</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
